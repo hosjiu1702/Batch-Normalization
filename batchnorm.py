@@ -10,23 +10,20 @@
 
  class BatchNorm(nn.Module):
      
-     def __init__(self, gamma, beta, eps, momentum):
+     def __init__(self, num_feats, gamma, beta, eps, momentum):
          super().__init__()
-         self.gamma = gamma
-         self.beta = beta
-         self.eps = eps
-         self.momentum = momentum
+         # BN learnable parameters
+         self.gamma = nn.Parameter(torch.zeros(num_feats))
+         self.beta = nn.Parameter(torch.zeros(num_features))
 
-         self._running_mean = None
-         self._running_var = None
+         # BN hyperparams
+         self.eps = torch.tensor(num_feats * [eps])
+         self.momentum = torch.tensor(num_feat * [momentum])
+
+         self._running_mean = torch.zeros(num_features)
+         self._running_var = torch.zeros(num_features)
 
     def forward(self, x):
-        if self._running_mean is None:
-            self._running_mean = torch.zeros(x.shape, dtype=x.dtype)
-        
-        if self._running_var is None:
-            self._running_var = torch.zeros(x.shape, dtype=x.dtype)
-
         if self.training:
             mean = torch.mean(x, 0) # mini-batch mean
             var = torch.var(x, 0, unbiased=False) # mini-batch variance 
