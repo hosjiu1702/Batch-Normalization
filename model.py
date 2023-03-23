@@ -16,7 +16,7 @@ class FFN(nn.Module):
             num_hidden: List[int],
             input_size: int,
             output_size: int,
-            use_bn: bool
+            use_bn: bool = False
         ):
         super(FFN, self).__init__()
         self._k = len(num_hidden) # Number of hidden layers
