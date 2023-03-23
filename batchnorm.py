@@ -22,7 +22,7 @@ class BatchNorm(nn.Module):
 
         # BN hyperparams
         self.eps = torch.tensor(num_feats * [eps])
-        self.momentum = torch.tensor(num_feat * [momentum])
+        self.momentum = torch.tensor(num_feats * [momentum])
 
         self._running_mean = torch.zeros(num_feats)
         self._running_var = torch.zeros(num_feats)
@@ -35,8 +35,8 @@ class BatchNorm(nn.Module):
             """ Use exponential moving average for
             estimating statistics (mean & variance) during training phase
             """
-            self._running_mean = (1 - momentum) * self._running_mean + momentum * mean
-            self._running_var = (1 - momentum) * self._running_var + momentum * var
+            self._running_mean = (1 - self.momentum) * self._running_mean + self.momentum * mean
+            self._running_var = (1 - self.momentum) * self._running_var + self.momentum * var
 
             x_hat = (x - mean) / torch.sqrt(var + self.eps) # normalize
         else:
