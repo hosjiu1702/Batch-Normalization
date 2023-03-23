@@ -19,14 +19,14 @@
          super().__init__()
          # BN learnable parameters
          self.gamma = nn.Parameter(torch.zeros(num_feats))
-         self.beta = nn.Parameter(torch.zeros(num_features))
+         self.beta = nn.Parameter(torch.zeros(num_feats))
 
          # BN hyperparams
          self.eps = torch.tensor(num_feats * [eps])
          self.momentum = torch.tensor(num_feat * [momentum])
 
-         self._running_mean = torch.zeros(num_features)
-         self._running_var = torch.zeros(num_features)
+         self._running_mean = torch.zeros(num_feats)
+         self._running_var = torch.zeros(num_feats)
 
     def forward(self, x):
         if self.training:
