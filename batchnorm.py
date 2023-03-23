@@ -10,7 +10,12 @@
 
  class BatchNorm(nn.Module):
      
-     def __init__(self, num_feats, gamma, beta, eps, momentum):
+     def __init__(
+             self, 
+             num_feats: int,
+             eps: float = 1.e-5,
+             momentum: float = 0.1
+             ):
          super().__init__()
          # BN learnable parameters
          self.gamma = nn.Parameter(torch.zeros(num_feats))
