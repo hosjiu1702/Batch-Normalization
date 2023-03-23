@@ -5,6 +5,8 @@ from typing import List, Text
 import torch
 import torch.nn as nn
 
+from batchnorm import BatchNorm
+
 
 """ A simple Feedforward Neural Network """
 class FFN(nn.Module):
