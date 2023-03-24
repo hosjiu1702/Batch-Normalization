@@ -52,7 +52,7 @@ val_loader = DataLoader(
                 )
 
 # Initialize model (w/o batch normalization layer)
-model = FFN(HIDDEN_LAYERS, INPUT_SIZE, OUTPUT_SIZE)
+model = FFN(HIDDEN_LAYERS, INPUT_SIZE, OUTPUT_SIZE, use_bn=False)
 
 # Optimizer, here we use Stochastic Gradient Descent as in the original paper
 optimizer = optim.SGD(model.parameters(), lr=LR)
@@ -64,6 +64,7 @@ CE_loss = nn.CrossEntropyLoss()
 for epoch in range(EPOCHS):
     model.train(True)
 
+    # Training
     print(f"[EPOCH {epoch + 1}]")
     tmp_loss = 0.
     for idx, (imgs, labels) in enumerate(train_loader):
@@ -77,11 +78,13 @@ for epoch in range(EPOCHS):
             print(f"Train Loss = {tmp_loss / 200:.3f} / {epoch * 1000 + (idx + 1)} (steps)")
             tmp_loss = 0.
 
-    model.train(False)
+    # Evaluating
+    model.eval()
     val_loss = 0.
-    for idx, (imgs, labels) in enumerate(val_loader):
-        logits = model(imgs)
-        loss = CE_loss(logits, labels)
-        val_loss += loss.item()
-    print(f"Validation Loss = {val_loss / (idx + 1):.3f}\n")
+    with torch.no_grad():
+        for idx, (imgs, labels) in enumerate(val_loader):
+            logits = model(imgs)
+            loss = CE_loss(logits, labels)
+            val_loss += loss.item()
+        print(f"Validation Loss = {val_loss / (idx + 1):.3f}\n")
 
